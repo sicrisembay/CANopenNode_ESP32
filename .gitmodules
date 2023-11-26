@@ -2,3 +2,7 @@
 	path = CANopenNode
 	url = https://github.com/sicrisembay/CANopenNode.git
 	branch = master
+[submodule "esp-idf"]
+	path = esp-idf
+	url = https://github.com/espressif/esp-idf.git
+	branch = release/v5.2
