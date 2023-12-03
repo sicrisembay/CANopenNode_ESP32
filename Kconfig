@@ -1,0 +1,171 @@
+menuconfig USE_CANOPENNODE
+    bool "CANopenNode"
+    default n
+
+    if USE_CANOPENNODE
+        menu "TWAI Configuration"
+            config CO_TWAI_TX_GPIO
+                int "TX IO"
+                default 1
+            config CO_TWAI_RX_GPIO
+                int "RX IO"
+                default 2
+            menu "Supported Baud Rate"
+                config CO_BPS_25K
+                    bool "25kbps"
+                    default y
+                config CO_BPS_50K
+                    bool "50kbps"
+                    default y
+                config CO_BPS_100K
+                    bool "100kbps"
+                    default y
+                config CO_BPS_125K
+                    bool "125kbps"
+                    default y
+                config CO_BPS_250K
+                    bool "250kbps"
+                    default y
+                config CO_BPS_500K
+                    bool "500kbps"
+                    default y
+                config CO_BPS_800K
+                    bool "800kbps"
+                    default y
+                config CO_BPS_1M
+                    bool "1Mbps"
+                    default y
+            endmenu #"Supported Baud Rate"
+            choice
+                prompt "Default Baud Rate"
+                default CO_DEFAULT_BPS_1M
+                config CO_DEFAULT_BPS_25K
+                    depends on CO_BPS_25K
+                    bool "25kbps"
+                config CO_DEFAULT_BPS_50K
+                    depends on CO_BPS_50K
+                    bool "50kbps"
+                config CO_DEFAULT_BPS_100K
+                    depends on CO_BPS_100K
+                    bool "100kbps"
+                config CO_DEFAULT_BPS_125K
+                    depends on CO_BPS_125K
+                    bool "125kbps"
+                config CO_DEFAULT_BPS_250K
+                    depends on CO_BPS_250K
+                    bool "250kbps"
+                config CO_DEFAULT_BPS_500K
+                    depends on CO_BPS_500K
+                    bool "500kbps"
+                config CO_DEFAULT_BPS_800K
+                    depends on CO_BPS_800K
+                    bool "800kbps"
+                config CO_DEFAULT_BPS_1M
+                    depends on CO_BPS_1M
+                    bool "1Mbps"
+            endchoice
+            config CO_DEFAULT_BPS
+                int
+                default 25 if CO_DEFAULT_BPS_25K
+                default 50 if CO_DEFAULT_BPS_50K
+                default 100 if CO_DEFAULT_BPS_100K
+                default 125 if CO_DEFAULT_BPS_125K
+                default 250 if CO_DEFAULT_BPS_250K
+                default 500 if CO_DEFAULT_BPS_500K
+                default 800 if CO_DEFAULT_BPS_800K
+                default 1000 if CO_DEFAULT_BPS_1M
+                default 250
+        endmenu #"TWAI Configuration"
+        menu "Task Configuration"
+            choice
+                prompt "Core Affinity of CANopenNode"
+                config CO_TASK_CORE0
+                    bool "Core0"
+                config CO_TASK_CORE1
+                    depends on (SOC_CPU_CORES_NUM > 1)
+                    bool "Core1"
+            endchoice
+            config CO_TASK_CORE
+                int
+                default 0 if CO_TASK_CORE0
+                default 1 if CO_TASK_CORE1
+            config CO_MAIN_TASK_STACK_SIZE
+                int "Main Task stack size"
+                default 4096
+            config CO_MAIN_TASK_PRIORITY
+                int "Main Task priority"
+                default 2
+            config CO_MAIN_TASK_INTERVAL_MS
+                int "Main Task Interval (ms)"
+                default 10
+            config CO_PERIODIC_TASK_STACK_SIZE
+                int "Periodic Task stack size"
+                default 4096
+            config CO_PERIODIC_TASK_PRIORITY
+                int "Periodic Task priority"
+                default 3
+            config CO_PERIODIC_TASK_INTERVAL_MS
+                int "Periodic Task Interval (ms)"
+                default 1
+            config CO_RX_TASK_STACK_SIZE
+                int "Rx Task stack size"
+                default 4096
+            config CO_RX_TASK_PRIORITY
+                int "Rx Task priority"
+                default 4
+            config CO_TX_TASK_STACK_SIZE
+                int "Tx Task stack size"
+                default 4096
+            config CO_TX_TASK_PRIORITY
+                int "Tx Task priority"
+                default 5
+        endmenu
+        config CO_DEFAULT_NODE_ID
+            int "Node ID"
+            default 10
+        config CO_FIRST_HB_TIME
+            int "First Heartbeat time (ms)"
+            default 500
+        config CO_SDO_SERVER_TIMEOUT
+            int "SDO Server Timeout (ms)"
+            default 2000
+        config CO_SDO_CLIENT_TIMEOUT
+            int "SDO Client Timeout (ms)"
+            default 500
+        config CO_SDO_CLIENT_BLOCK_TRANSFER
+            bool "SDO Client Block Transfer"
+            default n
+        menuconfig CO_LED_ENABLE
+            bool "CiA 303-3 (LED indicator)"
+            if CO_LED_ENABLE
+                menu "Red LED"
+                    config CO_LED_RED_GPIO
+                        int "LED Red GPIO"
+                        range -1 63
+                        default 38
+                    config CO_LED_RED_ACTIVE_HIGH
+                        bool "Active High"
+                        default y
+                endmenu
+                menu "Green LED"
+                    config CO_LED_GREEN_GPIO
+                        int "LED Green GPIO"
+                        range -1 63
+                        default 39
+                    config CO_LED_GREEN_ACTIVE_HIGH
+                        bool "Active High"
+                        default y
+                endmenu
+            endif #CO_LED_ENABLE
+        menu "Debug"
+            config CO_DEBUG_SDO
+                bool "SDO client/server"
+                default y
+            config CO_DEBUG_DRIVER_CAN_SEND
+                bool "CAN send"
+                default n
+            config CO_DEBUG_DRIVER_CAN_RECEIVE
+                bool "CAN receive"
+                default n
+        endmenu #"Debug"
+    endif

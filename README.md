@@ -1,6 +1,6 @@
 # CANopenNode ESP32
 
-CANopenNode device support for Espressif ESP32
+CANopenNode support for Espressif ESP32. This is normally referenced as a submodule in a project.
 
 # Environment
 
