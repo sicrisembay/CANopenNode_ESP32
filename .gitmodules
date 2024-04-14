@@ -1,4 +1,4 @@
 [submodule "CANopenNode"]
 	path = CANopenNode
-	url = https://github.com/CANopenNode/CANopenNode.git
+	url = https://github.com/sicrisembay/CANopenNode.git
 	branch = master
