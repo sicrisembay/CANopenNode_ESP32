@@ -355,6 +355,8 @@ CO_ReturnError_t CO_CANsend(CO_CANmodule_t *CANmodule, CO_CANtx_t *buffer)
 {
     CO_ReturnError_t err = CO_ERROR_NO;
 
+    CO_LOCK_CAN_SEND(CANmodule);
+
     /* Verify overflow */
     if (buffer->bufferFull)
     {
@@ -380,7 +382,6 @@ CO_ReturnError_t CO_CANsend(CO_CANmodule_t *CANmodule, CO_CANtx_t *buffer)
              buffer->data[7]);
 #endif
 
-    CO_LOCK_CAN_SEND(CANmodule);
     buffer->bufferFull = true;
     CANmodule->CANtxCount++;
     xTaskNotify(xCoTxTaskHandle, 0, eNoAction);
